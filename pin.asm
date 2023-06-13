@@ -8,28 +8,10 @@ cseg at 100h
 ; P0: Bit 0-3 digits
 ; P1: Bit 0-7 segments
 ; P2: Bit 0-7 Key input
-; ------------------------------------------------
-; Interrupt für TIMER0: Einsprung bei 0Bh
-;-------------------------------------------------
-ORG 0Bh
-;call zeigen
-reti
-;-------------------------------------------------------
-;init: TIMER wird initialisiert
-; für 40 ms benötigt man einen 16 bit Timer
-; das dauert zu lange in der Simulation! 
-; Daher hier eine kurze Variante!
-; Es wird nur von C0h auf FFh hochgezählt und 
-; dann der Timer wird auf C0h gesetzt
-; (für Hardware müsste das ersetzt werden!)
-;-------------------------------------------------------
+; P3: Flagging (P3.7: grade gedrückt , P3.6: Succ/Fail state)
 ORG 20h
 ;tommy
 init:
-mov IE, #10010010b
-mov tmod, #00000010b
-mov tl0, #0c0h  ; Timer-Initionalsierung 
-mov th0, #0c0h
 mov P0,#00h
 mov P1,#0FFh
 mov P2,#0FFh
@@ -275,36 +257,24 @@ zeigen:
 ; 1. digit
 mov DPTR, #displayDB
 mov a, r7
-;mov b, #0ah
-;div ab
-;xch a, b
 movc a,@a+dptr
 mov r3, a
 
 ; 2. digit
 mov DPTR, #displayDB
 mov a, r6
-;mov b, #0ah
-;div ab
-;xch a, b
 movc a,@a+dptr
 mov r2, a
 
 ; 3. digit
 mov DPTR, #displayDB
 mov a, r5
-;mov b, #0ah
-;div ab
-;xch a, b
 movc a,@a+dptr
 mov r1, a
 
 ; 4. digit
 mov DPTR, #displayDB
 mov a, r4
-;mov b, #0ah
-;div ab
-;xch a, b
 movc a,@a+dptr
 mov r0, a
 
